@@ -213,45 +213,7 @@ void displayTotalAmount() {
     lcd.print("Total: " + String(totalAmount));
 }
 
-// it handles all the web socket
-void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
 
-  switch (type) {
-    
-    case WStype_DISCONNECTED: {
-      Serial.printf("[%u] Disconnected!\n", num);
-      break;
-    }
-    case WStype_CONNECTED: {
-      IPAddress ip = webSocket.remoteIP(num);
-      Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
-      // send message to client
-      webSocket.sendTXT(num, "0");
-      //sendDateTime();
-      if(numSchedules) sendSchedules();
-      if(numFeedLog) sendFeedLog();
-      break;
-    }
-    case WStype_TEXT: {
-      StaticJsonDocument<200> doc;
-      deserializeJson(doc, payload, length);
-      uint8_t cmd = doc["cmd"];
-      Serial.print("cmd: ");
-      Serial.print(cmd);
-
-      switch (cmd) {
-
-        case 1: {
-          
-          break;
-        }
-        
-      }
-      break;
-    }
-
-  }
-}
 
 void handleMain() {
   server.send_P(200, "text/html", html_template ); 
